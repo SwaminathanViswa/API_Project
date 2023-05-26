@@ -1,4 +1,5 @@
 const express = require("express");
+var bodyParser = require("body-parser");
 
 //Database
 const database = require("./database")
@@ -6,6 +7,11 @@ const database = require("./database")
 
 //Initialise express
 const booky = express();
+
+//this is something you need to use whenever you are using post request
+//urlencoded({extended: true}) just means that whatever url that is being passed can contain strings, objects...
+booky.use(bodyParser.urlencoded({extended: true}));
+booky.use(bodyParser.json());
 
 
 /*
@@ -190,6 +196,22 @@ booky.get("/pbl/:ibsn", (req,res) => {
   return res.json({publications:getSpecificPublication})
 });
 
+
+//POST METHODS START
+
+/*
+Route            /book/new
+Description      Add new books
+Access           Public
+Parameter        NONE
+Methods          POST
+*/
+
+booky.post("/book/new", (req, res) => {
+  const newBook = req.body;
+  database.books.push(newBook);
+  return res.json({updaredBooks:database.books})
+});
 
 booky.listen(3000, () => {
   console.log("Server is up and running");

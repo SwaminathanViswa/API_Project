@@ -13,7 +13,7 @@
 //collections of PUBLICATIONS
 //id, name, books
 
-//We have to design and code an API over This
+//We have to design and code an API over this
 
 //1. BOOKS
 //We need an API :-
@@ -33,3 +33,9 @@
 //To get all the publications - DONE
 //To get a specific publication - DONE
 //To get a list of publications based on a book
+
+
+//POST REQUEST
+// 1. ADD A NEW BOOK
+// 2. ADD A NEW PUBLICATION
+// 3. ADD A NEW AUTHOR
