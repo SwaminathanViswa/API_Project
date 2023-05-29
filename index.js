@@ -210,7 +210,36 @@ Methods          POST
 booky.post("/book/new", (req, res) => {
   const newBook = req.body;
   database.books.push(newBook);
-  return res.json({updaredBooks:database.books})
+  return res.json({updatedBooks:database.books})
+});
+
+
+/*
+Route            /author/new
+Description      Add new authors
+Access           Public
+Parameter        NONE
+Methods          POST
+*/
+
+booky.post("/au/new", (req, res) => {
+  const newAuthor = req.body;
+  database.author.push(newAuthor);
+  return res.json({updatedAuthors:database.author})
+});
+
+/*
+Route            /pb/new
+Description      Add new publications
+Access           Public
+Parameter        NONE
+Methods          POST
+*/
+
+booky.post("/pb/new", (req,res) => {
+  const newPublication = req.body;
+  database.publication.push(newPublication);
+  return res.json(database.publication);
 });
 
 booky.listen(3000, () => {
