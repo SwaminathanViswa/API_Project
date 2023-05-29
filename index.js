@@ -197,7 +197,7 @@ booky.get("/pbl/:ibsn", (req,res) => {
 });
 
 
-//POST METHODS START
+//POST METHODS START (to add a new item into the webpage)
 
 /*
 Route            /book/new
@@ -240,6 +240,40 @@ booky.post("/pb/new", (req,res) => {
   const newPublication = req.body;
   database.publication.push(newPublication);
   return res.json(database.publication);
+});
+
+/***********PUT***********/
+
+/*
+Route            /pb/update/book
+Description      Update or add a new publication
+Access           Public
+Parameter        isbn
+Methods          PUT
+*/
+
+booky.put("/pb/update/book/:isbn", (req,res) => {
+  //update the publication Database
+  database.publication.forEach((pub) => {
+    if(pub.id === req.body.pubId) {
+      return pub.books.push(req.params.isbn);
+    }
+  });
+
+  //Update the book database
+  database.books.forEach((book) => {
+    if (book.ISBN === req.params.isbn) {
+      book.publication = req.body.pubId;
+      return;
+    }
+  });
+
+  return res.json({
+    books: database.books,
+    publications: database.publication,
+    message: "Successfully updated publication"
+  });
+
 });
 
 booky.listen(3000, () => {

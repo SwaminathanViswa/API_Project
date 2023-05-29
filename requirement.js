@@ -39,3 +39,6 @@
 // 1. ADD A NEW BOOK - DONE
 // 2. ADD A NEW PUBLICATION - DONE
 // 3. ADD A NEW AUTHOR - DONE
+
+/***********PUT***********/
+//1. Update book details if author is changed
