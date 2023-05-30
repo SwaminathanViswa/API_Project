@@ -41,4 +41,9 @@
 // 3. ADD A NEW AUTHOR - DONE
 
 /***********PUT***********/
-//1. Update book details if author is changed
+//1. Update book details if author is changed - DONE
+
+/***********DELETE***********/
+//1. Delete a book - DONE
+//2. Delete author from book
+//3. Delete author from book and related book from author - DONE
