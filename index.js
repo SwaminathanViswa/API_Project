@@ -1,8 +1,12 @@
+require("dotenv").config();
+
+
 const express = require("express");
+const mongoose = require("mongoose");
 var bodyParser = require("body-parser");
 
 //Database
-const database = require("./database")
+const database = require("./database/database")
 
 
 //Initialise express
@@ -12,6 +16,12 @@ const booky = express();
 //urlencoded({extended: true}) just means that whatever url that is being passed can contain strings, objects...
 booky.use(bodyParser.urlencoded({extended: true}));
 booky.use(bodyParser.json());
+
+//the env is for security purposes
+mongoose.connect(
+  process.env.MONGO_URL
+).then(() => console.log("Connection Established!"));
+
 
 
 /*
@@ -301,7 +311,7 @@ booky.delete("/book/delete/:isbn", (req,res) => {
 
 /*
 Route            /book/delete/author
-Description      Delete a author from book
+Description      Delete a author from book and related book from author
 Access           Public
 Parameter        isbn, authorId
 Methods          DELETE
@@ -334,6 +344,26 @@ booky.delete("/book/delete/author/:isbn/:authorId", (req,res)=> {
     author:database.author,
     message:"Author was deleted!!"});
 });
+
+/*
+Route            /book/delete/author
+Description      Delete a author from book
+Access           Public
+Parameter        authorId
+Methods          DELETE
+*/
+
+booky.delete("/book/delete/au/:authorId", (req,res) => {
+  database.books.forEach((book) => {
+      const newAuthorList = book.author.filter(
+        (eachAuthor) => eachAuthor !== parseInt(req.params.authorId)
+      );
+      book.author = newAuthorList;
+      return;
+  });
+  return res.json({books: database.books})
+});
+
 
 
 booky.listen(3000, () => {

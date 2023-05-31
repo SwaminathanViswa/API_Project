@@ -45,5 +45,14 @@
 
 /***********DELETE***********/
 //1. Delete a book - DONE
-//2. Delete author from book
+//2. Delete author from book - DONE
 //3. Delete author from book and related book from author - DONE
+
+
+
+//Schema - Blueprint of how data has to be constructed
+//MongoDb is schemaless
+//Mongoose has Schema
+//mongoose - validation, relationship with other data.
+//model -> document model of MongoDB
+//Schema -> Model -> use them.
