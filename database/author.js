@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 //create author schema
-const AuthorSchema = moongoose.Schema(
+const AuthorSchema = mongoose.Schema(
   {
     id:Number,
     name:String,
@@ -9,6 +9,6 @@ const AuthorSchema = moongoose.Schema(
   }
 );
 
-const AuthorModel = mongoose.model("Books",AuthorSchema);
+const AuthorModel = mongoose.model("Authors",AuthorSchema);
 
 module.exports = AuthorModel;

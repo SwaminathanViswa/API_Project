@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 //create publication schema
-const PublicationSchema = moongoose.Schema(
+const PublicationSchema = mongoose.Schema(
   {
     id:Number,
     name:String,
@@ -9,6 +9,6 @@ const PublicationSchema = moongoose.Schema(
   }
 );
 
-const PublicationModel = mongoose.model("Books",PublicationSchema);
+const PublicationModel = mongoose.model("Publications",PublicationSchema);
 
 module.exports = PublicationModel;

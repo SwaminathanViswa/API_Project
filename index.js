@@ -8,6 +8,11 @@ var bodyParser = require("body-parser");
 //Database
 const database = require("./database/database")
 
+//Models
+const BookModel = require("./database/book");
+const AuthorModel = require("./database/author");
+const PublicationModel = require("./database/publication");
+
 
 //Initialise express
 const booky = express();
@@ -32,8 +37,9 @@ Parameter        NONE
 Methods          GET
 */
 
-booky.get("/",(req,res) => {
-  return res.json({books:database.books});
+booky.get("/", async (req,res) => {
+  const getAllBooks = await BookModel.find();
+  return res.json(getAllBooks);
 });
 
 
@@ -45,12 +51,16 @@ Parameter        isbn
 Methods          GET
 */
 
-booky.get("/is/:isbn",(req,res) => {
-  const getSpecificBook = database.books.filter(
-    (book) => book.ISBN === req.params.isbn
-  );
+booky.get("/is/:isbn",async (req,res) => {
 
-  if(getSpecificBook.length === 0) {
+  const getSpecificBook = await BookModel.findOne({ISBN:req.params.isbn});
+
+//  const getSpecificBook = database.books.filter(
+//    (book) => book.ISBN === req.params.isbn
+//  );
+
+// since mongodb doesnt understand the triple equals to, we use the method of null
+  if(!getSpecificBook) {
     return res.json({error: `No book found for the ISBN of ${req.params.isbn}`})
   };
 
@@ -66,16 +76,25 @@ Parameter        cat
 Methods          GET
 */
 
-booky.get("/c/:cat",(req,res) => {
-  const getSpecificBook = database.books.filter(
-    (book) => book.category.includes(req.params.cat)
-  )
+booky.get("/c/:cat", async (req,res) => {
 
-  if(getSpecificBook.length === 0) {
-    return res.json({error:`No book found the category of ${req.params.cat}`})
-  }
+  const getSpecificBook = await BookModel.findOne({category:req.params.cat});
 
-  return res.json({books:getSpecificBook})
+  if(!getSpecificBook) {
+    return res.json({error: `No book found for the category of ${req.params.cat}`})
+  };
+
+  return res.json({book:getSpecificBook})
+
+  // const getSpecificBook = database.books.filter(
+  //   (book) => book.category.includes(req.params.cat)
+  // )
+  //
+  // if(getSpecificBook.length === 0) {
+  //   return res.json({error:`No book found the category of ${req.params.cat}`})
+  // }
+  //
+  // return res.json({books:getSpecificBook})
 });
 
 
@@ -107,8 +126,9 @@ Parameter        NONE
 Methods          GET
 */
 
-booky.get("/au",(req,res) => {
-  return res.json({authors:database.author})
+booky.get("/au",async (req,res) => {
+  const getAllAuthors = await AuthorModel.find();
+  return res.json(getAllAuthors);
 });
 
 
@@ -162,8 +182,9 @@ Parameter        NONE
 Methods          GET
 */
 
-booky.get("/pb", (req,res) => {
-  return res.json({publications: database.publication})
+booky.get("/pb", async (req,res) => {
+  const getAllPublications = await PublicationModel.find();
+  return res.json(getAllPublications);
 });
 
 /*
@@ -217,10 +238,16 @@ Parameter        NONE
 Methods          POST
 */
 
-booky.post("/book/new", (req, res) => {
-  const newBook = req.body;
-  database.books.push(newBook);
-  return res.json({updatedBooks:database.books})
+booky.post("/book/new", async (req, res) => {
+  const { newBook } = req.body;
+  const addNewBook = BookModel.create(newBook);
+  return res.json({
+    books: addNewBook,
+    message:"Book was added!!"
+  });
+
+  // database.books.push(newBook);
+  // return res.json({updatedBooks:database.books})
 });
 
 
@@ -232,10 +259,16 @@ Parameter        NONE
 Methods          POST
 */
 
-booky.post("/au/new", (req, res) => {
-  const newAuthor = req.body;
-  database.author.push(newAuthor);
-  return res.json({updatedAuthors:database.author})
+booky.post("/au/new", async (req, res) => {
+  const {newAuthor} = req.body;
+  const addNewAuthor = AuthorModel.create(newAuthor);
+  return res.json ({
+    author: addNewAuthor,
+    message: "New Author was added!!"
+  });
+  // const newAuthor = req.body;
+  // database.author.push(newAuthor);
+  // return res.json({updatedAuthors:database.author})
 });
 
 /*
@@ -247,9 +280,16 @@ Methods          POST
 */
 
 booky.post("/pb/new", (req,res) => {
-  const newPublication = req.body;
-  database.publication.push(newPublication);
-  return res.json(database.publication);
+  const {newPublication} = req.body;
+  const addNewPublication = PublicationModel.create(newPublication);
+  return res.json({
+    publication: addNewPublication,
+    message: "New Publication added!"
+  });
+
+  // const newPublication = req.body;
+  // database.publication.push(newPublication);
+  // return res.json(database.publication);
 });
 
 /***********PUT***********/
